@@ -1,53 +1,59 @@
-# 🌳 App Decision Tree Explorer — Visualizando a Lógica das Árvores de Decisão
+# Decision Tree Explorer App — Visualizing Decision Tree Logic
 
-Este aplicativo interativo em ***Streamlit*** e ***Python*** permite explorar, de maneira visual e intuitiva, os fundamentos das **Árvores de Decisão** — um dos modelos mais interpretáveis e amplamente utilizados em Aprendizado de Máquina, capaz de transformar dados em regras lógicas de decisão.
+This interactive application, built with **Streamlit** and **Python**, allows you to explore the fundamentals of **Decision Trees** in a visual and intuitive way.
 
-Este projeto foi desenvolvido como material de apoio para a disciplina de **Aprendizado de Máquina**, da **Profa. Mariana Recamonde Mendoza**, no **Instituto de Informática — Universidade Federal do Rio Grande do Sul (UFRGS)**.
+Decision Trees are among the most interpretable and widely used models in Machine Learning. They work by recursively splitting the feature space into regions and transforming data into a sequence of simple, logical decision rules.
 
----
+Beyond being powerful on their own, decision trees are the foundation of many modern, state-of-the-art algorithms. Popular ensemble methods such as **Random Forests** and **Gradient Boosted Trees** (e.g., XGBoost) are built by combining multiple decision trees to improve predictive performance, stability, and generalization.
 
-## Objetivo do Aplicativo
+Understanding how a single decision tree works is therefore essential for understanding many of the most successful models used in practice today.
 
-As Árvores de Decisão buscam a "pureza" nos dados através de perguntas sequenciais. Este explorador permite visualizar:
-
-- Como os hiperparâmetro **max_depth** (profundidade) e **min_samples_split** alteram a complexidade do modelo.
-- O impacto da escolha do **critério de impureza** (Gini vs. Entropia).
-- A **geometria das fronteiras de decisão**, que diferentemente do k-Nearest Neighbors, são sempre ortogonais (alinhadas aos eixos).
-- O fenômeno do **Overfitting**, que ocorre quando a árvore cresce sem limites.
-- A **Importância dos Atributos**, revelando quais características do dado mais influenciam na decisão final.
-- Uma solução visual para **datasets multidimensionais** (como o dataset Wine), projetando a decisão nos dois atributos mais informativos.
+This app was developed by **Prof. Mariana Recamonde Mendoza** as supporting material for the **Machine Learning** course taught at the **Institute of Informatics — Federal University of Rio Grande do Sul (UFRGS)**.
 
 ---
 
-## Visão Geral do App
+## App Goals
 
-O aplicativo possui três áreas principais:
+Decision Trees seek "purity" in data through sequential questions. This explorer allows you to visualize:
 
-1. **Configurações (barra lateral)**: Ajuste de hiperparâmetros e escolha do conjunto de dados (Moons 2D ou Wine Multidimensional).
-2. **Visualização da Árvore e Fronteira**: Lado a lado, veja a estrutura lógica da árvore (nós e folhas) e como isso se traduz no mapa de decisão.
-3. **Métricas de Performance**: Comparação em tempo real da acurácia entre os dados de Treino (Simulado) e Teste (Prova Real).
-
----
-
-## Configurações do Modelo
-
-Na barra lateral, você pode ajustar:
-
-- **Critério de Impureza**: Gini ou Entropia.
-- **Profundidade Máxima (max_depth)**: Controla o crescimento da árvore.
-- **Atributos Analisados por Divisão (max_features)**: Quantas colunas a árvore considera ao criar um novo nó.
-- **Mínimo de amostras**: Evita divisões em nós com poucos dados.
-- **Seed de Teste**: Garante que os resultados sejam reprodutíveis.
+- How the hyperparameters **max_depth** and **min_samples_split** alter model complexity.
+- The impact of choosing different **impurity criteria** (Gini vs. Entropy).
+- The **geometry of decision boundaries**, which unlike kNN, are always orthogonal (aligned with the axes).
+- The phenomenon of **Overfitting** when the tree grows without limits.
+- **Feature Importance**, revealing which data characteristics most influence the final decision.
+- A visual solution for **multidimensional datasets** (such as the Wine dataset), projecting the decision onto the two most informative attributes.
 
 ---
 
-## Por que usar este Explorador?
+## App Overview
 
-Diferente do kNN, as árvores não exigem normalização de dados e são modelos de **"Caixa Branca"**. Através deste app, o aluno consegue "enxergar" o raciocínio da máquina, auditando cada corte feito no espaço de atributos.
+The application has three main areas:
+
+1. **Settings (Sidebar)**: Adjust hyperparameters and choose the dataset (2D Moons or Multidimensional Wine).
+2. **Tree and Boundary Visualization**: Side-by-side, see the logical structure of the tree (nodes and leaves) and how it translates into the decision map.
+3. **Performance Metrics**: Real-time comparison of accuracy between Training (Simulated) and Testing (Real Test) data.
 
 ---
 
-## Créditos
-**Autora:** Profa. Mariana Recamonde Mendoza, Instituto de Informática, Universidade Federal do Rio Grande do Sul (UFRGS).
+## Model Settings
 
-*Nota: O código foi desenvolvido com o apoio de IA generativa (Gemini 3.1 e ChatGPT 5.2).*
+In the sidebar, you can adjust:
+
+- **Impurity Criterion**: Gini or Entropy.
+- **Maximum Depth (max_depth)**: Controls tree growth.
+- **Features for Split (max_features)**: How many columns the tree considers when creating a new node.
+- **Minimum Samples**: Prevents splits in nodes with too few data points.
+- **Test Seed**: Ensures results are reproducible.
+
+---
+
+## Why Use This Explorer?
+
+Unlike kNN, trees do not require data normalization and are **"White Box"** models. Through this app, students can "see" the machine's reasoning, auditing every cut made in the feature space.
+
+---
+
+## Credits
+**Author:** Prof. Mariana Recamonde Mendoza, Institute of Informatics, Federal University of Rio Grande do Sul (UFRGS).
+
+*Note: The code was developed with the support of generative AI (Gemini 3.1 Pro).*

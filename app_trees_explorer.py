@@ -8,73 +8,73 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
 # ============================================================
-# CABEÇALHO INSTITUCIONAL
+# INSTITUTIONAL HEADER
 # ============================================================
 
-st.set_page_config(page_title="Explorador de Árvores de Decisão", layout="wide")
+st.set_page_config(page_title="Decision Tree Explorer", layout="wide")
 
 st.markdown("""
 <div style="background-color:#f0f2f6; padding:15px; border-radius:10px; border-left: 5px solid #28a745;">
-    <strong>Aprendizado de Máquina – Profa. Mariana Recamonde Mendoza</strong><br>
-    Instituto de Informática, Universidade Federal do Rio Grande do Sul (UFRGS).<br>
-    <em>Material interativo desenvolvido com apoio de IA generativa (Gemini 3.1 Pro).</em>
+    <strong>Machine Learning – Profa. Mariana Recamonde Mendoza</strong><br>
+    Institute of Informatics, Federal University of Rio Grande do Sul (UFRGS).<br>
+    <em>Interactive material developed with generative AI support (Gemini 3.1 Pro and ChatGPT 5.2).</em>
 </div>
 """, unsafe_allow_html=True)
 
-st.title("🌳 Explorador Interativo de Árvores de Decisão")
+st.title("Decision Tree Interactive Explorer")
 
 st.markdown("""
-As **Árvores de Decisão** aprendem regras lógicas para separar os dados. 
-Diferente do kNN, elas não precisam de normalização e são altamente interpretáveis.
-Este explorador permite ajustar hiperparâmetros e visualizar como o modelo "particiona" o espaço.
+**Decision Trees** learn logical rules to separate data. 
+Unlike kNN, they do not require normalization and are highly interpretable.
+This explorer allows you to adjust hyperparameters and visualize how the model partitions the space.
 """)
 
 # ============================================================
-# SIDEBAR – CONFIGURAÇÕES
+# SIDEBAR – SETTINGS
 # ============================================================
 
-st.sidebar.header("🛠️ Configurações da Árvore")
+st.sidebar.header("Tree Settings")
 
-# Hiperparâmetros (Valores padrão da biblioteca como base)
-criterion = st.sidebar.selectbox("Critério de Impureza", ["gini", "entropy"])
-max_depth = st.sidebar.slider("Profundidade Máxima (max_depth)", 1, 20, 3)
-max_features = st.sidebar.slider("Atributos p/ Divisão (max_features)", 1, 13, 13) # Default None (all)
-min_samples_split = st.sidebar.slider("Mínimo de amostras p/ Nó Interno", 2, 20, 2)
+# Hyperparameters
+criterion = st.sidebar.selectbox("Impurity Criterion", ["gini", "entropy"])
+max_depth = st.sidebar.slider("Maximum Depth (max_depth)", 1, 20, 3)
+max_features = st.sidebar.slider("Features for Split (max_features)", 1, 13, 13) 
+min_samples_split = st.sidebar.slider("Minimum Samples for Split", 2, 20, 2)
 
 st.sidebar.markdown("---")
 
-dataset_name = st.sidebar.selectbox("Escolha o Dataset", ["Moons (2D Simples)", "Wine (Multidimensional)"])
+dataset_name = st.sidebar.selectbox("Select Dataset", ["Moons (2D Simple)", "Wine (Multidimensional)"])
 
-# Opção de Normalização (Para demonstrar invariância)
+# Normalization Option
 st.sidebar.markdown("---")
-st.sidebar.subheader("⚖️ Pré-processamento")
-normalize = st.sidebar.checkbox("Ativar Normalização (Min-Max)", value=False, help="Árvores de decisão são invariantes à escala, então os resultados não devem mudar.")
+st.sidebar.subheader("Preprocessing")
+normalize = st.sidebar.checkbox("Enable Normalization (Min-Max)", value=False, help="Decision Trees are scale-invariant, so results should not change.")
 
-# Gestão de Dados de Teste
-st.sidebar.subheader("🔄 Controle de Teste")
+# Test Data Management
+st.sidebar.subheader("Test Control")
 if "test_seed" not in st.session_state:
     st.session_state.test_seed = 42
 
-seed_input = st.sidebar.text_input("Seed de Teste (Reprodutibilidade):", value=str(st.session_state.test_seed))
+seed_input = st.sidebar.text_input("Test Seed (Reproducibility):", value=str(st.session_state.test_seed))
 
-if st.sidebar.button("Gerar novos dados de teste"):
+if st.sidebar.button("Generate new test data"):
     try:
         st.session_state.test_seed = int(seed_input)
-        st.sidebar.success(f"Novos dados gerados (Seed {seed_input})")
+        st.sidebar.success(f"New data generated (Seed {seed_input})")
     except:
-        st.sidebar.error("Seed deve ser um número inteiro.")
+        st.sidebar.error("Seed must be an integer.")
 
 # ============================================================
-# CARREGAMENTO E PREPARAÇÃO DOS DADOS
+# DATA LOADING AND PREPARATION
 # ============================================================
 
 @st.cache_data
 def get_data(name, seed):
-    if name == "Moons (2D Simples)":
+    if name == "Moons (2D Simple)":
         X, y = make_moons(n_samples=200, noise=0.20, random_state=42)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed)
         feature_names = ["X1", "X2"]
-        target_names = ["Lua A", "Lua B"]
+        target_names = ["Moon A", "Moon B"]
     else:
         data = load_wine()
         X, y = data.data, data.target
@@ -85,7 +85,7 @@ def get_data(name, seed):
 
 X_train, X_test, y_train, y_test, features, targets = get_data(dataset_name, st.session_state.test_seed)
 
-# Aplicação de Normalização
+# Normalization Application
 if normalize:
     scaler = MinMaxScaler()
     X_train_processed = scaler.fit_transform(X_train)
@@ -94,15 +94,14 @@ else:
     X_train_processed = X_train
     X_test_processed = X_test
 
-# Variáveis para exibição e malha
+# Variables for display and mesh
 X_disp_train = X_train_processed
 X_disp_test = X_test_processed
 
 # ============================================================
-# TREINAMENTO
+# TRAINING
 # ============================================================
 
-# Ajustamos max_features para não exceder o número de colunas do dataset atual
 current_max_features = min(max_features, X_train_processed.shape[1])
 
 clf = DecisionTreeClassifier(
@@ -115,13 +114,13 @@ clf = DecisionTreeClassifier(
 clf.fit(X_train_processed, y_train)
 
 # ============================================================
-# VISUALIZAÇÃO - COLUNAS
+# VISUALIZATION - COLUMNS
 # ============================================================
 
 col1, col2 = st.columns([1, 1])
 
 with col1:
-    st.subheader("🌲 Estrutura da Árvore")
+    st.subheader("Tree Structure")
     fig_tree, ax_tree = plt.subplots(figsize=(10, 8))
     plot_tree(clf, 
               feature_names=features, 
@@ -133,26 +132,22 @@ with col1:
     st.pyplot(fig_tree)
 
 with col2:
-    st.subheader("🗺️ Fronteira de Decisão")
+    st.subheader("Decision Boundary")
     
-    # Lógica para visualização 2D em datasets > 2D
-    if dataset_name == "Moons (2D Simples)":
+    if dataset_name == "Moons (2D Simple)":
         idx_x, idx_y = 0, 1
     else:
-        # Pega as duas características mais importantes
         importances = clf.feature_importances_
         indices = np.argsort(importances)[::-1]
         idx_x, idx_y = indices[0], indices[1]
-        st.caption(f"Visualizando os eixos: **{features[idx_x]}** e **{features[idx_y]}** (as mais informativas).")
+        st.caption(f"Visualizing axes: **{features[idx_x]}** and **{features[idx_y]}** (most informative).")
 
-    # Geração da Malha (Grid)
+    # Mesh Grid Generation
     h = 0.05
     x_min, x_max = X_disp_train[:, idx_x].min() - 0.5, X_disp_train[:, idx_x].max() + 0.5
     y_min, y_max = X_disp_train[:, idx_y].min() - 0.5, X_disp_train[:, idx_y].max() + 0.5
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
     
-    # Para prever, precisamos de um vetor completo (mesma dimensão que o dataset)
-    # Criamos um vetor preenchido com as médias do treino, e substituímos X e Y pela malha
     X_grid = np.tile(np.mean(X_disp_train, axis=0), (xx.ravel().shape[0], 1))
     X_grid[:, idx_x] = xx.ravel()
     X_grid[:, idx_y] = yy.ravel()
@@ -162,23 +157,42 @@ with col2:
     fig_map, ax_map = plt.subplots(figsize=(10, 8))
     ax_map.contourf(xx, yy, Z, alpha=0.3, cmap='viridis')
     
-    # Plotar pontos de treino
-    scatter = ax_map.scatter(X_disp_train[:, idx_x], X_disp_train[:, idx_y], c=y_train, edgecolors='k', cmap='viridis', alpha=0.5, label='Treino')
+    # Plot training points
+    ax_map.scatter(X_disp_train[:, idx_x], X_disp_train[:, idx_y], c=y_train, edgecolors='k', cmap='viridis', alpha=0.5, label='Train')
     
-    # Plotar pontos de teste destacados
+    # Plot testing points
     preds_test = clf.predict(X_disp_test)
+    
+    # Point Inspection functionality
+    st.markdown("---")
+    st.subheader("Test Point Inspection")
+    
+    selected_point_idx = st.selectbox(
+        "Select a test point to highlight:",
+        options=range(len(y_test)),
+        format_func=lambda i: f"Point {i+1} (True Class: {targets[y_test[i]]})"
+    )
+
     for i in range(len(y_test)):
+        is_selected = (i == selected_point_idx)
         color = 'white' if preds_test[i] == y_test[i] else 'red'
         marker = 'o' if preds_test[i] == y_test[i] else 'X'
-        ax_map.scatter(X_disp_test[i, idx_x], X_disp_test[i, idx_y], c=color, edgecolors='black', s=100, marker=marker)
+        size = 200 if is_selected else 100
+        zorder = 5 if is_selected else 3
+        edge_color = 'yellow' if is_selected else 'black'
+        edge_width = 3 if is_selected else 1
+        
+        ax_map.scatter(X_disp_test[i, idx_x], X_disp_test[i, idx_y], 
+                       c=color, edgecolors=edge_color, linewidths=edge_width,
+                       s=size, marker=marker, zorder=zorder)
 
     ax_map.set_xlabel(features[idx_x])
     ax_map.set_ylabel(features[idx_y])
-    ax_map.set_title("Fronteira e Pontos de Teste (🔴 = Erro)")
+    ax_map.set_title("Boundary and Test Points (Red/X = Error)")
     st.pyplot(fig_map)
 
 # ============================================================
-# MÉTRICAS DE DESEMPENHO
+# PERFORMANCE METRICS
 # ============================================================
 
 st.markdown("---")
@@ -187,24 +201,35 @@ mcol1, mcol2, mcol3 = st.columns(3)
 acc_train = clf.score(X_disp_train, y_train)
 acc_test = clf.score(X_disp_test, y_test)
 
-mcol1.metric("Acurácia (Treino/Simulado)", f"{acc_train:.1%}")
-mcol2.metric("Acurácia (Teste/Prova Real)", f"{acc_test:.1%}")
+mcol1.metric("Accuracy (Train/Simulated)", f"{acc_train:.1%}")
+mcol2.metric("Accuracy (Test/Real Test)", f"{acc_test:.1%}")
 
 if normalize:
-    st.info("💡 **Destaque Pedagógico**: Note que, ao ativar a normalização, os eixos mudam para o intervalo [0, 1], mas a **forma da fronteira** e a **acurácia** permanecem idênticas. Isso prova que as Árvores de Decisão são invariantes à escala!")
+    st.info("Pedagogical Note: Notice that when enabling normalization, the axes change to the [0, 1] range, but the boundary shape and accuracy remain identical. This proves that Decision Trees are scale-invariant.")
 
 if acc_train - acc_test > 0.15:
-    mcol3.warning("⚠️ Possível Overfitting: Modelo decorou os dados de treino!")
+    mcol3.warning("Potential Overfitting: Model memorized training data!")
 elif acc_train < 0.70:
-    mcol3.info("ℹ️ Possível Underfitting: Tente aumentar a profundidade.")
+    mcol3.info("Potential Underfitting: Try increasing depth.")
 else:
-    mcol3.success("✅ Modelo Equilibrado: Boa generalização.")
+    mcol3.success("Balanced Model: Good generalization.")
 
 # ============================================================
-# DETALHAMENTO DE ATRIBUTOS
+# FEATURE IMPORTANCE
 # ============================================================
 
-with st.expander("📊 Ver Importância dos Atributos"):
+with st.expander("Show Feature Importance"):
     impact = pd.Series(clf.feature_importances_, index=features).sort_values(ascending=False)
     st.bar_chart(impact)
-    st.write("Atributos com maior importância foram usados para definir a raiz e os primeiros nós da árvore.")
+    st.write("Attributes with higher importance were used define the root and initial nodes of the tree.")
+
+# Detailed Test Results Table
+with st.expander("Show Detailed Test Results Table"):
+    results_df = pd.DataFrame({
+        "Point": [f"Point {i+1}" for i in range(len(y_test))],
+        "True Class": [targets[i] for i in y_test],
+        "Prediction": [targets[i] for i in preds_test],
+        "Result": ["Correct" if p == r else "Error" for p, r in zip(preds_test, y_test)]
+    })
+    st.dataframe(results_df, use_container_width=True, hide_index=True)
+    st.write(f"The model predicted {np.sum(preds_test == y_test)} out of {len(y_test)} unknown samples correctly.")

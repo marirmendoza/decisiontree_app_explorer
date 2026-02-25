@@ -72,13 +72,13 @@ if st.sidebar.button("Generate new test data"):
 def get_data(name, seed):
     if name == "Moons (2D Simple)":
         X, y = make_moons(n_samples=200, noise=0.20, random_state=42)
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed, stratify=y)
         feature_names = ["X1", "X2"]
         target_names = ["Moon A", "Moon B"]
     else:
         data = load_wine()
         X, y = data.data, data.target
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed, stratify=y)
         feature_names = data.feature_names
         target_names = data.target_names
     return X_train, X_test, y_train, y_test, feature_names, target_names

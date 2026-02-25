@@ -14,7 +14,9 @@ This app was developed by **Prof. Mariana Recamonde Mendoza** as supporting mate
 
 ## App Goals
 
-Decision Trees seek "purity" in data through sequential questions. This explorer allows you to visualize:
+Decision Trees seek "purity" in data through sequential questions. This translates into sequential "cuts" in the input space. 
+
+This explorer allows you to visualize:
 
 - How the hyperparameters **max_depth** and **min_samples_split** alter model complexity.
 - The impact of choosing different **impurity criteria** (Gini vs. Entropy).

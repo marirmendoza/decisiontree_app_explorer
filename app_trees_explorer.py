@@ -137,10 +137,24 @@ with col2:
     if dataset_name == "Moons (2D Simple)":
         idx_x, idx_y = 0, 1
     else:
+        # Get the two most important features
         importances = clf.feature_importances_
         indices = np.argsort(importances)[::-1]
         idx_x, idx_y = indices[0], indices[1]
         st.caption(f"Visualizing axes: **{features[idx_x]}** and **{features[idx_y]}** (most informative).")
+
+    # Placeholder to ensure the plot stays above the selection box
+    plot_placeholder = st.empty()
+
+    # Point Inspection functionality (Selection)
+    st.markdown("---")
+    st.subheader("Test Point Inspection")
+    
+    selected_point_idx = st.selectbox(
+        "Select a test point to highlight:",
+        options=range(len(y_test)),
+        format_func=lambda i: f"Point {i+1} (True Class: {targets[y_test[i]]})"
+    )
 
     # Mesh Grid Generation
     h = 0.05
@@ -162,7 +176,6 @@ with col2:
     
     # Plot testing points
     preds_test = clf.predict(X_disp_test)
-    
 
     for i in range(len(y_test)):
         is_selected = (i == selected_point_idx)
@@ -180,17 +193,10 @@ with col2:
     ax_map.set_xlabel(features[idx_x])
     ax_map.set_ylabel(features[idx_y])
     ax_map.set_title("Boundary and Test Points (Red/X = Error)")
-    st.pyplot(fig_map)
-
-    # Point Inspection functionality
-    st.markdown("---")
-    st.subheader("Test Point Inspection")
     
-    selected_point_idx = st.selectbox(
-        "Select a test point to highlight:",
-        options=range(len(y_test)),
-        format_func=lambda i: f"Point {i+1} (True Class: {targets[y_test[i]]})"
-    )
+    # Render the plot in the placeholder ABOVE the selection tools
+    plot_placeholder.pyplot(fig_map)
+
 # ============================================================
 # PERFORMANCE METRICS
 # ============================================================

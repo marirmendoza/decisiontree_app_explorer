@@ -17,7 +17,7 @@ st.markdown("""
 <div style="background-color:#f0f2f6; padding:15px; border-radius:10px; border-left: 5px solid #28a745;">
     <strong>Machine Learning – Profa. Mariana Recamonde Mendoza</strong><br>
     Institute of Informatics, Federal University of Rio Grande do Sul (UFRGS).<br>
-    <em>Interactive material developed with generative AI support (Gemini 3.1 Pro and ChatGPT 5.2).</em>
+    <em>Interactive material developed with the support of generative AI (Gemini 3.1 and ChatGPT 5.2).</em>
 </div>
 """, unsafe_allow_html=True)
 

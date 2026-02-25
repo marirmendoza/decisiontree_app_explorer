@@ -163,15 +163,6 @@ with col2:
     # Plot testing points
     preds_test = clf.predict(X_disp_test)
     
-    # Point Inspection functionality
-    st.markdown("---")
-    st.subheader("Test Point Inspection")
-    
-    selected_point_idx = st.selectbox(
-        "Select a test point to highlight:",
-        options=range(len(y_test)),
-        format_func=lambda i: f"Point {i+1} (True Class: {targets[y_test[i]]})"
-    )
 
     for i in range(len(y_test)):
         is_selected = (i == selected_point_idx)
@@ -191,6 +182,15 @@ with col2:
     ax_map.set_title("Boundary and Test Points (Red/X = Error)")
     st.pyplot(fig_map)
 
+    # Point Inspection functionality
+    st.markdown("---")
+    st.subheader("Test Point Inspection")
+    
+    selected_point_idx = st.selectbox(
+        "Select a test point to highlight:",
+        options=range(len(y_test)),
+        format_func=lambda i: f"Point {i+1} (True Class: {targets[y_test[i]]})"
+    )
 # ============================================================
 # PERFORMANCE METRICS
 # ============================================================
@@ -201,8 +201,8 @@ mcol1, mcol2, mcol3 = st.columns(3)
 acc_train = clf.score(X_disp_train, y_train)
 acc_test = clf.score(X_disp_test, y_test)
 
-mcol1.metric("Accuracy (Train/Simulated)", f"{acc_train:.1%}")
-mcol2.metric("Accuracy (Test/Real Test)", f"{acc_test:.1%}")
+mcol1.metric("Accuracy (Train)", f"{acc_train:.1%}")
+mcol2.metric("Accuracy (Test)", f"{acc_test:.1%}")
 
 if normalize:
     st.info("Pedagogical Note: Notice that when enabling normalization, the axes change to the [0, 1] range, but the boundary shape and accuracy remain identical. This proves that Decision Trees are scale-invariant.")

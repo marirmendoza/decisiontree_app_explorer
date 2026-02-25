@@ -10,6 +10,8 @@ Understanding how a single decision tree works is therefore essential for unders
 
 This app was developed by **Prof. Mariana Recamonde Mendoza** as supporting material for the **Machine Learning** course taught at the **Institute of Informatics — Federal University of Rio Grande do Sul (UFRGS)**.
 
+🔗 [https://inf-knn-app-explorer.streamlit.app](https://inf-decisiontree-explorer-app.streamlit.app)
+
 ---
 
 ## App Goal
